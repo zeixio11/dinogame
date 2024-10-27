@@ -117,7 +117,7 @@ def mostrar_game_over():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
+            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_y :
                 esperando = False
 
 # función para reiniciar el juego
