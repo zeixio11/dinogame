@@ -75,7 +75,7 @@ class Dino(pygame.sprite.Sprite):
             self.velocidad_jump -= 1      
             if self.velocidad_jump < -15:
                 self.jump = False
-                self.velocidad_jump = -15
+                self.velocidad_jump = 15
 
     def jumping(self):
         if not self.jump:
