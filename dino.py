@@ -2,7 +2,7 @@ import pygame
 
 # iniciar pygame
 pygame.init()
-
+pygame.mixer.init()
 # definir colores 
 BLANCO = (255, 255, 255)
 NEGRO = (0, 0, 0)
@@ -10,6 +10,15 @@ NEGRO = (0, 0, 0)
 # tamaño de pantalla
 ANCHO_PANTALLA = 700
 ALTO_PANTALLA = 700
+
+# cargar archivos de sonido
+sonido_salto = pygame.mixer.Sound('salto.wav')
+sonido_colision = pygame.mixer.Sound('colision.wav')
+sonido_game_over = pygame.mixer.Sound('game_over.wav')
+pygame.mixer.music.load('musica_fondo.wav')  # cargar música de fondo
+
+# reproducir música de fondo en bucle
+pygame.mixer.music.play(-1)
 
 # crear ventana
 pantalla = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
@@ -71,6 +80,7 @@ class Dino(pygame.sprite.Sprite):
     def jumping(self):
         if not self.jump:
             self.jump = True
+            sonido_salto.play()
 
 # el cactus
 class Cactus(pygame.sprite.Sprite):
@@ -95,6 +105,7 @@ def mostrar_game_over():
     pantalla.blit(text_game_over, (ANCHO_PANTALLA // 2 - text_game_over.get_width() // 2, ALTO_PANTALLA // 2 - text_game_over.get_height() // 2))
     pantalla.blit(text_score, (ANCHO_PANTALLA // 2 - text_score.get_width() // 2, ALTO_PANTALLA // 2 + text_game_over.get_height() // 2))
     pygame.display.flip()
+    sonido_game_over.play()
 
     # esperar hasta que se presione espacio para reiniciar
     esperando = True
@@ -163,6 +174,7 @@ while ejecutando:
     if colisiones:
         ejecutando = False
         print("murido")
+        sonido_colision.play()
         mostrar_game_over()
         reiniciar_juego()
         ejecutando = True
