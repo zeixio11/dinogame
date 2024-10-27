@@ -1,31 +1,60 @@
 import pygame
 
-
-# innciamos pygame
+# iniciar pygame
 pygame.init()
 
 # definir colores 
-BLANCO = (255,255,255)
-NEGRO = (0,0,0)
+BLANCO = (255, 255, 255)
+NEGRO = (0, 0, 0)
 
-# size pantalla
-info = pygame.display.Info()
-ANCHO_PANTALLA = info.current_w
-ALTO_PANTALLA = info.current_h
+# tamaño de pantalla
+ANCHO_PANTALLA = 700
+ALTO_PANTALLA = 700
 
 # crear ventana
-pantalla =pygame.display.set_mode((ANCHO_PANTALLA,ALTO_PANTALLA))
+pantalla = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
 pygame.display.set_caption("DINO GAME")
 
 reloj = pygame.time.Clock()
 
+# función para mostrar pantalla de selección de personajes
+def seleccionar_personaje():
+    seleccionando = True
+    personajes = ['dino.png', 'mario.png']
+    seleccionado = 0
+
+    while seleccionando:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_m:
+                    seleccionado = (seleccionado - 1) % len(personajes)
+                if evento.key == pygame.K_d:
+                    seleccionado = (seleccionado + 1) % len(personajes)
+                if evento.key == pygame.K_RETURN:
+                    seleccionando = False
+        
+        pantalla.fill(BLANCO)
+        personaje_image = pygame.image.load(personajes[seleccionado])
+        pantalla.blit(personaje_image, (ANCHO_PANTALLA // 2 - personaje_image.get_width() // 2, ALTO_PANTALLA // 2 - personaje_image.get_height() // 2))
+
+        # Mostrar instrucciones
+        font = pygame.font.SysFont('Sans', 30)
+        text_instr = font.render("Presiona D para Dinosaurio o M para Mario", True, NEGRO)
+        pantalla.blit(text_instr, (ANCHO_PANTALLA // 2 - text_instr.get_width() // 2, ALTO_PANTALLA // 2 + personaje_image.get_height()))
+
+        pygame.display.flip()
+
+    return personajes[seleccionado]
 
 # el dinosaurio
 class Dino(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, imagen):
         super().__init__()
-        self.image = pygame.image.load('dino.png').convert_alpha()
-        self.rect =self.image.get_rect()
+        self.image = pygame.image.load(imagen).convert_alpha()
+        self.rect = self.image.get_rect()
         self.rect.x = 50           
         self.rect.y = ALTO_PANTALLA - self.rect.height
         self.jump = False
@@ -37,14 +66,15 @@ class Dino(pygame.sprite.Sprite):
             self.velocidad_jump -= 1      
             if self.velocidad_jump < -15:
                 self.jump = False
-                self.velocidad_jump = 15
+                self.velocidad_jump = -15
 
     def jumping(self):
         if not self.jump:
             self.jump = True
-#spike el cactus
-class cactus(pygame.sprite.Sprite):
-    def __init__(self,velocidad):
+
+# el cactus
+class Cactus(pygame.sprite.Sprite):
+    def __init__(self, velocidad):
         super().__init__()
         self.image = pygame.image.load('cactus.png').convert_alpha()
         self.rect = self.image.get_rect()
@@ -55,39 +85,25 @@ class cactus(pygame.sprite.Sprite):
     def update(self):
         self.rect.x -= self.speed
         if self.rect.x < -20:
-            self.kill
+            self.kill()
 
-
-
-all_sprites = pygame.sprite.Group()
-obstaculos = pygame.sprite.Group()
-trex = Dino()
-all_sprites.add(trex)
-
-contador_cactus = 0
-
-font = pygame.font.SysFont('Sans',50)
-
-Score = 0
-
+# función para mostrar pantalla de Game Over
 def mostrar_game_over():
     pantalla.fill(BLANCO)
     text_game_over = font.render("GAME OVER", True, NEGRO)
     text_score = font.render(f'SCORE:{Score}', True, NEGRO)
-    text_retry = font.render("PRESS [Y] TO RETRY", True, NEGRO)
     pantalla.blit(text_game_over, (ANCHO_PANTALLA // 2 - text_game_over.get_width() // 2, ALTO_PANTALLA // 2 - text_game_over.get_height() // 2))
     pantalla.blit(text_score, (ANCHO_PANTALLA // 2 - text_score.get_width() // 2, ALTO_PANTALLA // 2 + text_game_over.get_height() // 2))
-    pantalla.blit(text_retry, (ANCHO_PANTALLA // 2 - text_retry.get_width() // 2, ALTO_PANTALLA // 3 - text_retry.get_height() // 3))
     pygame.display.flip()
- 
-  # esperar hasta que se presione espacio para reiniciar
+
+    # esperar hasta que se presione espacio para reiniciar
     esperando = True
     while esperando:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_y:
+            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
                 esperando = False
 
 # función para reiniciar el juego
@@ -95,29 +111,41 @@ def reiniciar_juego():
     global all_sprites, obstaculos, trex, contador_cactus, Score
     all_sprites.empty()
     obstaculos.empty()
-    trex = Dino()
+    trex = Dino(imagen_personaje)
     all_sprites.add(trex)
     contador_cactus = 0
     Score = 0
 
+# seleccionar personaje antes de empezar
+imagen_personaje = seleccionar_personaje()
 
+all_sprites = pygame.sprite.Group()
+obstaculos = pygame.sprite.Group()
+trex = Dino(imagen_personaje)
+all_sprites.add(trex)
 
-#bucle principal 
+contador_cactus = 0
+
+font = pygame.font.SysFont('Sans', 50)
+
+Score = 0
+
+# bucle principal
 ejecutando = True
 while ejecutando:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             ejecutando = False
-            print ("salir")
+            print("salir")
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_SPACE:
                 trex.jumping()
-                print=("salto")
+                print("salto")
 
-#control de cactus
+    # control de cactus
     if contador_cactus > 40:
         speed_spike = 10 + (Score // 100)
-        spike = cactus(speed_spike)
+        spike = Cactus(speed_spike)
         all_sprites.add(spike)
         obstaculos.add(spike)
         contador_cactus = 0
@@ -125,16 +153,16 @@ while ejecutando:
 
     all_sprites.update()
 
-#lo que te mata
+    # lo que te mata
     colisiones = pygame.sprite.spritecollide(trex, obstaculos, False)
     for spike in obstaculos:
-        hitbox_trex = trex.rect.inflate(-10,-10)
+        hitbox_trex = trex.rect.inflate(-10, -10)
         if hitbox_trex.colliderect(spike.rect):
             colisiones = True
             break   
     if colisiones:
         ejecutando = False
-        print = ("murido")
+        print("murido")
         mostrar_game_over()
         reiniciar_juego()
         ejecutando = True
@@ -144,22 +172,24 @@ while ejecutando:
 
     all_sprites.draw(pantalla)
 
-#le puntaje
-    text_score = font.render(f'SCORE:{Score}',True,NEGRO)
-    pantalla.blit(text_score,(230, 10))
+    # puntaje
+    text_score = font.render(f'SCORE:{Score}', True, NEGRO)
+    pantalla.blit(text_score, (230, 10))
 
- 
     pygame.display.flip()
-
     reloj.tick(30)
 
-pygame.quit()   
-
-#miguel ha jugado 104 37 veces dino game 
+pygame.quit()
 
 
-# pantalla game over y volver a jugar (completed) 
-# que tenga la pantalla completa(completed) 
-# que pueda elgir el presonaje 
-# 
-#   
+
+
+
+
+
+
+
+
+
+
+
