@@ -103,8 +103,10 @@ def mostrar_game_over():
     pantalla.fill(BLANCO)
     text_game_over = font.render("GAME OVER", True, NEGRO)
     text_score = font.render(f'SCORE:{Score}', True, NEGRO)
+    text_retry = font.render("PRESS [Y] TO RETRY", True, NEGRO)
     pantalla.blit(text_game_over, (ANCHO_PANTALLA // 2 - text_game_over.get_width() // 2, ALTO_PANTALLA // 2 - text_game_over.get_height() // 2))
     pantalla.blit(text_score, (ANCHO_PANTALLA // 2 - text_score.get_width() // 2, ALTO_PANTALLA // 2 + text_game_over.get_height() // 2))
+    pantalla.blit(text_retry, (ANCHO_PANTALLA // 2 - text_retry.get_width() // 2, ALTO_PANTALLA // 3 - text_retry.get_height() // 3))
     pygame.display.flip()
     sonido_game_over.play()
 
