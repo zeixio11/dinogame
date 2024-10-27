@@ -8,8 +8,9 @@ BLANCO = (255, 255, 255)
 NEGRO = (0, 0, 0)
 
 # tamaño de pantalla
-ANCHO_PANTALLA = 700
-ALTO_PANTALLA = 700
+info = pygame.display.Info()
+ANCHO_PANTALLA = info.current_w
+ALTO_PANTALLA = info.current_h
 
 # cargar archivos de sonido
 sonido_salto = pygame.mixer.Sound('salto.wav')
