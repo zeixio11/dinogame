@@ -30,7 +30,7 @@ reloj = pygame.time.Clock()
 # función para mostrar pantalla de selección de personajes
 def seleccionar_personaje():
     seleccionando = True
-    personajes = ['dino.png', 'mario.png']
+    personajes = ['dino1.png', 'mario.png']
     seleccionado = 0
 
     while seleccionando:
