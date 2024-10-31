@@ -67,9 +67,9 @@ class Dino(pygame.sprite.Sprite):
 
         # Animaciones para Dino y Mario
         if 'dino' in imagen:
-            self.sprites_caminata = [pygame.image.load(f"dino{i}.png") for i in range(1, 3)]
+            self.sprites_caminata = [pygame.image.load(f"dino{i}.png") for i in range(1, 5)]
         elif 'mario' in imagen:
-            self.sprites_caminata = [pygame.image.load(f"mario{i}.png") for i in range(1, 3)]
+            self.sprites_caminata = [pygame.image.load(f"mario{i}.png") for i in range(1, 5 )]
 
         self.indice_sprite = 0
 
@@ -161,8 +161,7 @@ while ejecutando:
             if evento.key == pygame.K_SPACE:
                 trex.jumping()
                 print("salto")
-        if evento.key == pygame.K_ESCAPE:
-                pygame.QUIT        
+              
 
     # control de cactus
     if contador_cactus > 40:
