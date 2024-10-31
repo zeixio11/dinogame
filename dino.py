@@ -199,7 +199,7 @@ while ejecutando:
     pantalla.blit(text_score, (230, 10))
 
     pygame.display.flip()
-    reloj.tick(20)
+    reloj.tick(25)
 
 pygame.quit()
 
