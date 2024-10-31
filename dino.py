@@ -30,9 +30,8 @@ reloj = pygame.time.Clock()
 # función para mostrar pantalla de selección de personajes
 def seleccionar_personaje():
     seleccionando = True
-    personajes = ['dino1.png', 'mario.png']
+    personajes = ['dino1.png', 'mario1.png']
     seleccionado = 0
-
     while seleccionando:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -45,44 +44,51 @@ def seleccionar_personaje():
                     seleccionado = (seleccionado + 1) % len(personajes)
                 if evento.key == pygame.K_RETURN:
                     seleccionando = False
-        
         pantalla.fill(BLANCO)
         personaje_image = pygame.image.load(personajes[seleccionado])
         pantalla.blit(personaje_image, (ANCHO_PANTALLA // 2 - personaje_image.get_width() // 2, ALTO_PANTALLA // 2 - personaje_image.get_height() // 2))
-
         # Mostrar instrucciones
         font = pygame.font.SysFont('Sans', 30)
         text_instr = font.render("Presiona D para Dinosaurio o M para Mario", True, NEGRO)
         pantalla.blit(text_instr, (ANCHO_PANTALLA // 2 - text_instr.get_width() // 2, ALTO_PANTALLA // 2 + personaje_image.get_height()))
-
         pygame.display.flip()
-
     return personajes[seleccionado]
 
-# el dinosaurio
+# el dinosaurio y mario
 class Dino(pygame.sprite.Sprite):
     def __init__(self, imagen):
         super().__init__()
         self.image = pygame.image.load(imagen).convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.x = 50           
+        self.rect.x = 50
         self.rect.y = ALTO_PANTALLA - self.rect.height
         self.jump = False
         self.velocidad_jump = 15
 
+        # Animaciones para Dino y Mario
+        if 'dino' in imagen:
+            self.sprites_caminata = [pygame.image.load(f"dino{i}.png") for i in range(1, 3)]
+        elif 'mario' in imagen:
+            self.sprites_caminata = [pygame.image.load(f"mario{i}.png") for i in range(1, 3)]
+
+        self.indice_sprite = 0
+
     def update(self):
         if self.jump:
             self.rect.y -= self.velocidad_jump
-            self.velocidad_jump -= 1      
+            self.velocidad_jump -= 1
             if self.velocidad_jump < -15:
                 self.jump = False
                 self.velocidad_jump = 15
+
+        # Animación de caminata
+        self.indice_sprite = (self.indice_sprite + 1) % len(self.sprites_caminata)
+        self.image = self.sprites_caminata[self.indice_sprite]
 
     def jumping(self):
         if not self.jump:
             self.jump = True
             sonido_salto.play()
-
 # el cactus
 class Cactus(pygame.sprite.Sprite):
     def __init__(self, velocidad):
@@ -155,6 +161,8 @@ while ejecutando:
             if evento.key == pygame.K_SPACE:
                 trex.jumping()
                 print("salto")
+        if evento.key == pygame.K_ESCAPE:
+                pygame.QUIT        
 
     # control de cactus
     if contador_cactus > 40:
@@ -192,7 +200,7 @@ while ejecutando:
     pantalla.blit(text_score, (230, 10))
 
     pygame.display.flip()
-    reloj.tick(30)
+    reloj.tick(20)
 
 pygame.quit()
 
