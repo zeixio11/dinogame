@@ -4,7 +4,8 @@ for edit this dino game you need:
 -python 3.12
 -pygame(the last version)
 -and download all the files in the project
-and put all this files in a carpet 
+and put all this files in a carpet
+-you need to run it in a code editor (I run and make it in Visual Studio Code)
 
 please make the animations better than me 
 
