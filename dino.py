@@ -1,4 +1,5 @@
 import pygame
+import os 
 
 # iniciar pygame
 pygame.init()
@@ -12,25 +13,20 @@ info = pygame.display.Info()
 ANCHO_PANTALLA = info.current_w
 ALTO_PANTALLA = info.current_h
 
+ruta_assets = 'assets'
+
 # cargar archivos de sonido
-sonido_salto = pygame.mixer.Sound('salto.wav')
-sonido_colision = pygame.mixer.Sound('colision.wav')
-sonido_game_over = pygame.mixer.Sound('game_over.wav')
-pygame.mixer.music.load('musica_fondo.wav')  # cargar música de fondo
+sonido_salto = pygame.mixer.Sound(os.path.join(ruta_assets, 'salto.wav'))
+sonido_colision = pygame.mixer.Sound(os.path.join(ruta_assets, 'colision.wav'))
+sonido_game_over = pygame.mixer.Sound(os.path.join(ruta_assets, 'game_over.wav'))
+pygame.mixer.music.load(os.path.join(ruta_assets, 'musica_fondo.wav'))  # cargar música de fondo
+pygame.mixer.music.play(-1)  # reproducir música de fondo en bucle
 
-# reproducir música de fondo en bucle
-pygame.mixer.music.play(-1)
-
-# crear ventana
-pantalla = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
-pygame.display.set_caption("DINO GAME")
-
-reloj = pygame.time.Clock()
 
 # función para mostrar pantalla de selección de personajes
 def seleccionar_personaje():
     seleccionando = True
-    personajes = ['dino1.png', 'mario1.png']
+    personajes = [os.path.join(ruta_assets, 'dino.png'), os.path.join(ruta_assets, 'mario.png')]
     seleccionado = 0
     while seleccionando:
         for evento in pygame.event.get():
