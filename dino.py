@@ -31,7 +31,7 @@ pygame.mixer.music.play(-1)  # reproducir música de fondo en bucle
 # función para mostrar pantalla de selección de personajes
 def seleccionar_personaje():
     seleccionando = True
-    personajes = [os.path.join(ruta_assets, 'dino.png'), os.path.join(ruta_assets, 'mario.png')]
+    personajes = [os.path.join(ruta_assets, 'dino1.png'), os.path.join(ruta_assets, 'mario1.png')]
     seleccionado = 0
     while seleccionando:
         for evento in pygame.event.get():
@@ -68,9 +68,9 @@ class Dino(pygame.sprite.Sprite):
 
         # Animaciones para Dino y Mario
         if 'dino' in imagen:
-            self.sprites_caminata = [pygame.image.load(f"dino{i}.png") for i in range(1, 5)]
+            self.sprites_caminata = [pygame.image.load(f"./assets/dino{i}.png") for i in range(1, 5)]
         elif 'mario' in imagen:
-            self.sprites_caminata = [pygame.image.load(f"mario{i}.png") for i in range(1, 5 )]
+            self.sprites_caminata = [pygame.image.load(f"./assets/mario{i}.png") for i in range(1, 5 )]
 
         self.indice_sprite = 0
 
@@ -94,7 +94,7 @@ class Dino(pygame.sprite.Sprite):
 class Cactus(pygame.sprite.Sprite):
     def __init__(self, velocidad):
         super().__init__()
-        self.image = pygame.image.load('cactus.png').convert_alpha()
+        self.image = pygame.image.load('./assets/cactus.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = ANCHO_PANTALLA
         self.rect.y = ALTO_PANTALLA - self.rect.height + 20
