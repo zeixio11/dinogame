@@ -13,6 +13,11 @@ info = pygame.display.Info()
 ANCHO_PANTALLA = info.current_w
 ALTO_PANTALLA = info.current_h
 
+pantalla = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
+pygame.display.set_caption("DINO GAME")
+
+reloj = pygame.time.Clock()
+
 ruta_assets = 'assets'
 
 # cargar archivos de sonido
