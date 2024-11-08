@@ -17,3 +17,7 @@ if you need change it is able (and free) to you do that
 
 - To donwload [Pygame library] click here -> https://www.pygame.org/download.shtml
 - To donwload [Python 3.12] click here -> https://www.python.org/downloads/
+
+To run the **game** you *click* the file or write this command in your terminal: 
+
+" python dino.py "
